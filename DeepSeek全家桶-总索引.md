@@ -5,7 +5,7 @@
 
 | 类别 | 仓 | DeepWiki | 论文精读 | 指南 | 精讲 | 图谱(节点/边) |
 |---|---|---|---|---|---|---|
-| Agent Harness | [讲透deepseek-harness](讲透deepseek-harness/README.md) | 0 页 | — | — | — | 3368/5160 |
+| Agent Harness | 讲透deepseek-harness | 0 页 | — | — | — | 3368/5160 |
 | 基础设施（训推系统） | [讲透3FS](讲透宇宙/04-研/讲透3FS//README.md) | 51 页 | ✓ | — | — | 2880/5617 |
 | 基础设施（训推系统） | [讲透DeepEP](讲透宇宙/02-透/讲透DeepEP//README.md) | 38 页 | — | ✓ | 4 | 290/552 |
 | 基础设施（训推系统） | [讲透DeepGEMM](讲透宇宙/02-透/讲透DeepGEMM//README.md) | 33 页 | — | ✓ | 4 | 571/1117 |
@@ -35,7 +35,7 @@
 | 模型与研究 | [讲透DeepSeek-OCR](讲透宇宙/04-研/讲透DeepSeek-OCR//README.md) | 39 页 | ✓ | — | — | 34/54 |
 | 模型与研究 | [讲透DeepSeek-OCR-2](讲透宇宙/04-研/讲透DeepSeek-OCR-2//README.md) | 33 页 | ✓ | — | — | 31/48 |
 | 模型与研究 | [讲透Engram](讲透宇宙/04-研/讲透Engram//README.md) | 33 页 | ✓ | — | — | 14/21 |
-| 生态与索引 | [讲透awesome-deepseek-agent](讲透awesome-deepseek-agent/README.md) | 33 页 | — | — | — | — |
+| 生态与索引 | 讲透awesome-deepseek-agent | 33 页 | — | — | — | — |
 | 生态与索引 | [讲透awesome-deepseek-coder](讲透宇宙/03-查/讲透awesome-deepseek-coder//README.md) | 16 页 | — | — | — | — |
 | 生态与索引 | [讲透awesome-deepseek-integration](讲透宇宙/03-查/讲透awesome-deepseek-integration//README.md) | 31 页 | — | — | — | — |
 | 生态与索引 | [讲透open-infra-index](讲透宇宙/03-查/讲透open-infra-index//README.md) | 20 页 | — | — | — | — |

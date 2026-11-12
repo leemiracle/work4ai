@@ -340,7 +340,7 @@ print(f"  Data poisoning 是训练侧的欺骗——你看不到它, 直到对�
 
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（`dsh`，MIT 协议）是 DeepSeek 官方 2026 年开源的 agent 框架：219 个插件包，"一切皆插件"架构，底层是 vendored Cordis。**它把本实验包前四种欺骗的反制机制，全部做成了架构级约束**——不是 prompt 里写"请不要骗我"，而是代码结构上让欺骗无处发生。
 
-本实验 = 一次 step-by-step 的代码审计。每条论断都给出可复现的 bash 命令。**完整的分层案例笔记**（核心运行时 / 能力接缝 / 信任平面 / 装配 / SDK 五大面，9 篇）见 [`Agent框架案例/deepseek-harness插件化框架`](./Agent框架案例/deepseek-harness插件化框架/README.md)；本实验只取"反欺骗"一个切面。
+本实验 = 一次 step-by-step 的代码审计。每条论断都给出可复现的 bash 命令。**完整的分层案例笔记**（核心运行时 / 能力接缝 / 信任平面 / 装配 / SDK 五大面，9 篇）见 [`Agent框架案例/deepseek-harness插件化框架`](讲透宇宙/01-学/讲透Agent/Agent框架案例/deepseek-harness插件化框架/README.md)；本实验只取"反欺骗"一个切面。
 
 > 运行环境：本地克隆 `C:\workspace\deepseek-harness`（bash 路径 `/c/workspace/deepseek-harness`），需安装 [ripgrep](https://github.com/BurntSushi/ripgrep)（`rg`）。
 
@@ -461,5 +461,5 @@ $ rg -n "56b3d4f" vendor/README.md
 - 母文件：[`欺骗动力学-社会进步的隐秘引擎.md`](./欺骗动力学-社会进步的隐秘引擎.md)
 - 评估表：已归档至 git 历史的反诈成熟度评估表（v1）（待写/未落盘）
 - 检测 Prompt 库：[`欺骗动力学-检测Prompt库.md`](./欺骗动力学-检测Prompt库.md)
-- 互文案例（2026-08-14 新增）：[`Agent上下文案例/codegraph代码知识图谱/notes/02-基准方法论与诚实披露.md`](./Agent上下文案例/codegraph代码知识图谱/notes/02-基准方法论与诚实披露.md)——"评测不自欺"的另一工业范本：双臂封锁防对照组污染（0/28）、不利数字（驻留上下文 +80%）与有利数字同页披露、供应链 SLSA L2。与实验 5 的 dsh 形成"结构对齐（harness 层）× 证据诚实（工具层）"两条正交路线
+- 互文案例（2026-08-14 新增）：`Agent上下文案例/codegraph代码知识图谱/notes/02-基准方法论与诚实披露.md`——"评测不自欺"的另一工业范本：双臂封锁防对照组污染（0/28）、不利数字（驻留上下文 +80%）与有利数字同页披露、供应链 SLSA L2。与实验 5 的 dsh 形成"结构对齐（harness 层）× 证据诚实（工具层）"两条正交路线
 ---

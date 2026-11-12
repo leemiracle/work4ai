@@ -3,7 +3,7 @@
 > 数据快照：2026-08-15 · 来源：GitHub Search API（`topic:harness stars:>=1000`，按 star 降序单页全量）
 > 三重校验：API total_count=37 = 解析条数 37 = 附录数据行 37 = 赛道合计 37 ✓ **零遗漏**
 > 姊妹篇：[`透视GitHub-AI高星仓库全景.md`](./透视GitHub-AI高星仓库全景.md)（topic:ai · 279 仓）、[`透视GitHub-LLM高星仓库全景.md`](./透视GitHub-LLM高星仓库全景.md)（topic:llm · 240 仓）——三篇合成「开源生态观测三镜」：ai 镜看 Agent 基建热，llm 镜看全栈分层，**harness 镜看 2026 年正在爆发的新共识词**。
-> 落地层：单仓源码级深读见 [`Agent框架案例/`](./Agent框架案例/README.md)（DeepSeek Harness 案例）；蒸馏成的 opencode skill 见 [`harness精华合入-总入口.md`](./harness精华合入-总入口.md)。
+> 落地层：单仓源码级深读见 [`Agent框架案例/`](讲透宇宙/01-学/讲透Agent/Agent框架案例/README.md)（DeepSeek Harness 案例）；蒸馏成的 opencode skill 见 [`harness精华合入-总入口.md`](讲透宇宙/01-学/讲透Agent/harness精华合入-总入口.md)。
 
 ---
 
@@ -147,10 +147,10 @@ awesome 清单直接收录 Inngest 的檄文《Your Agent Needs a Harness, Not a
 
 | 本镜产出 | 去处 |
 |---|---|
-| 概念卡（§3 五子系统/四层栈/CAR） | [`讲透宇宙/01-学/讲透Agent//`](讲透宇宙/01-学/讲透Agent)、[`Agent架构模式参考/`](./Agent架构模式参考) 的生态锚点 |
-| 20 仓核心思想蒸馏 | [`harness精华笔记.md`](./harness精华笔记.md) |
-| skill 合入 | [`harness精华合入-总入口.md`](./harness精华合入-总入口.md)（1 个 opencode skill） |
-| 单仓源码级深读 | [`Agent框架案例/`](./Agent框架案例/README.md)（已有 dsh 案例；deer-flow/CowAgent 是候选） |
+| 概念卡（§3 五子系统/四层栈/CAR） | [`讲透宇宙/01-学/讲透Agent//`](讲透宇宙/01-学/讲透Agent)、[`Agent架构模式参考/`](讲透宇宙/01-学/讲透Agent/Agent架构模式参考) 的生态锚点 |
+| 20 仓核心思想蒸馏 | `harness精华笔记.md` |
+| skill 合入 | [`harness精华合入-总入口.md`](讲透宇宙/01-学/讲透Agent/harness精华合入-总入口.md)（1 个 opencode skill） |
+| 单仓源码级深读 | [`Agent框架案例/`](讲透宇宙/01-学/讲透Agent/Agent框架案例/README.md)（已有 dsh 案例；deer-flow/CowAgent 是候选） |
 | AgentSkills 开放标准 | [`前沿与媒体/103-AgentSkills开放标准深度解析.md`](./前沿与媒体/103-AgentSkills开放标准深度解析.md) |
 
 ---
@@ -210,4 +210,4 @@ awesome 清单直接收录 Inngest 的檄文《Your Agent Needs a Harness, Not a
 
 ---
 
-生成：2026-08-15 · GitHub Search API 全量抓取 + 20 仓 README 精读（蒸馏见 [harness精华笔记](./harness精华笔记.md)）
+生成：2026-08-15 · GitHub Search API 全量抓取 + 20 仓 README 精读（蒸馏见 harness精华笔记）

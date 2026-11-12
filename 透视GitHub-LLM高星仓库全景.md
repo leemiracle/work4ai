@@ -98,19 +98,19 @@ datawhalechina 6 仓（hello-agents 73K、self-llm、happy-llm、llm-cookbook、
 
 ## 3. 七大洞察（已过反虚荣自检）
 
-**① 14 层价值链与「讲透LLM」篇目同构——LLM 工程学已成分层产业。** 附录 14 类从模型(03)到垂直(13)无一层缺位：每层都有 10K+ 星玩家、独立工具链和头部组织。这不是巧合，是**LLM 生产关系成熟的标志**：就像 Web 时代「浏览器-服务器-数据库-框架-应用」分层复现。本项目的 [`讲透LLM/`](./讲透LLM/README.md)（00 是什么→01 怎么来的→02 全景图→03 全栈→04 训练与部署→05 前沿）恰好是这条链的**理论镜像**——本附录是其**生态证据**。
+**① 14 层价值链与「讲透LLM」篇目同构——LLM 工程学已成分层产业。** 附录 14 类从模型(03)到垂直(13)无一层缺位：每层都有 10K+ 星玩家、独立工具链和头部组织。这不是巧合，是**LLM 生产关系成熟的标志**：就像 Web 时代「浏览器-服务器-数据库-框架-应用」分层复现。本项目的 `讲透LLM/`（00 是什么→01 怎么来的→02 全景图→03 全栈→04 训练与部署→05 前沿）恰好是这条链的**理论镜像**——本附录是其**生态证据**。
 
 **② 推理引擎是第一基础设施，且「本地/端侧」是绝对主线。** 01 类 16 仓合计约 55 万星：ollama 179K 一仓超过大多数赛道总和。更值得注意的是本地化的**极限竞赛**：浏览器内推理（web-llm 18.6K）、4GB 显存跑 70B（airllm 31.2K）、Apple Silicon SSD 缓存（omlx 18.7K）、Rust 单二进制（runanywhere）。「让模型在最差的硬件上跑起来」和「让 Agent 在最贵的模型上省钱」（洞察④）是同一条经济学。
 
 **③ 教育是第一大类（38 仓）——「学 LLM」比「用 LLM」更被需要。** LLMs-from-scratch 103.7K 是 star 效率之王（教程仓击败 99% 的工具仓）；datawhalechina 6 仓约 19 万星构成**中文自学生态**；NirDiamant 一人三仓（GenAI_Agents/RAG_Techniques/agents-towards-production）证明个人教育者可以撬动组织级注意力；llm_interview_note 14.9K、AccumulateMore/CV 23.3K——**面试与转行压力是 star 的直接变现通道**。对本项目的启示：讲透系列的「教学价值」正踩在这个最大赛道上。
 
-**④ token 经济学在 llm 域显学化。** caveman 98.3K（省 65% token）+ rtk 76.2K（CLI 代理省 60-90%）+ headroom 66.4K（压缩工具输出）+ context7 60.8K（最新文档供给）+ repomix 27.9K + toon 25.2K ≈ **38 万星**。当智能按 token 计价，「上下文压缩/供给/格式优化」就是新的性能工程。对应 [`讲透上下文缓存/`](./讲透上下文缓存/README.md)。
+**④ token 经济学在 llm 域显学化。** caveman 98.3K（省 65% token）+ rtk 76.2K（CLI 代理省 60-90%）+ headroom 66.4K（压缩工具输出）+ context7 60.8K（最新文档供给）+ repomix 27.9K + toon 25.2K ≈ **38 万星**。当智能按 token 计价，「上下文压缩/供给/格式优化」就是新的性能工程。对应 [`讲透上下文缓存/`](讲透宇宙/01-学/讲透Agent/讲透上下文缓存/README.md)。
 
-**⑤ 记忆层独立成科被最终确认：8 仓全 10K+，大厂入场。** mem0 63.3K + mempalace 58.4K + letta 24.2K + TencentDB-Agent-Memory 21.8K（腾讯把「对话/文档/代码→四类可复用记忆资产」做成团队级产品）+ memvid 16.2K + Memori 16.0K + EverOS 12.0K + MemOS 10.7K ≈ 22 万星。与 ai 域观察互证：「给 Agent 装持久记忆」已从 RAG 分裂为独立基础设施层。对应 [`讲透记忆/`](./讲透记忆/README.md)。
+**⑤ 记忆层独立成科被最终确认：8 仓全 10K+，大厂入场。** mem0 63.3K + mempalace 58.4K + letta 24.2K + TencentDB-Agent-Memory 21.8K（腾讯把「对话/文档/代码→四类可复用记忆资产」做成团队级产品）+ memvid 16.2K + Memori 16.0K + EverOS 12.0K + MemOS 10.7K ≈ 22 万星。与 ai 域观察互证：「给 Agent 装持久记忆」已从 RAG 分裂为独立基础设施层。对应 [`讲透记忆/`](讲透宇宙/01-学/讲透Agent/讲透记忆/README.md)。
 
 **⑥ 提示词泄露/越狱是 LLM 特有的安全学，攻防两侧都被 star 承认。** 攻：system_prompts_leaks 62.9K + L1B3RT4S 21.0K（越狱提示集）+ heretic 27.6K（自动去除审查）；防：Anthropic-Cybersecurity-Skills 27.8K（817 个结构化安全技能）；红队工具化：promptfoo 24.2K + PentestGPT 14.9K + hexstrike 11.0K ≈ **合计 18 万星**。「研究别人怎么给产品写 system prompt」在 llm 域是被 star 承认的学科。对应 [`欺骗动力学-检测Prompt库.md`](./欺骗动力学-检测Prompt库.md)。
 
-**⑦ topic 是注意力市场，有 3.75% 的熵——且榜首揭示了新王。** 9 个非 LLM 原生仓（ray/kubesphere/casdoor/doocs-md/gitleaks/Halfrost-Field 等）靠自打 llm 标签蹭进榜单，做生态研究必须显式剥离（本文设 14 类兜底）。更重要的信号：**榜首 ECC 240K 不是模型、不是框架，而是「给 Claude Code/Codex 等编码 Agent 做训练与性能优化的 harness 系统」**——元工具（训练 Agent 的工具）登顶，与 ai 域观察的「harness 成为新共识词」互证。对应 [`讲透宇宙/01-学/讲透Agent//`](讲透宇宙/01-学/讲透Agent) 与 [`Agent架构模式参考/`](./Agent架构模式参考)。
+**⑦ topic 是注意力市场，有 3.75% 的熵——且榜首揭示了新王。** 9 个非 LLM 原生仓（ray/kubesphere/casdoor/doocs-md/gitleaks/Halfrost-Field 等）靠自打 llm 标签蹭进榜单，做生态研究必须显式剥离（本文设 14 类兜底）。更重要的信号：**榜首 ECC 240K 不是模型、不是框架，而是「给 Claude Code/Codex 等编码 Agent 做训练与性能优化的 harness 系统」**——元工具（训练 Agent 的工具）登顶，与 ai 域观察的「harness 成为新共识词」互证。对应 [`讲透宇宙/01-学/讲透Agent//`](讲透宇宙/01-学/讲透Agent) 与 [`Agent架构模式参考/`](讲透宇宙/01-学/讲透Agent/Agent架构模式参考)。
 
 ---
 
@@ -128,16 +128,16 @@ datawhalechina 6 仓（hello-agents 73K、self-llm、happy-llm、llm-cookbook、
 
 | 本项目单元 | 生态证据（附录赛道） |
 |---|---|
-| [`讲透LLM/`](./讲透LLM/README.md) | 全链镜像：01/02/03 类 ↔ 00-05 篇目 |
-| [`讲透RAG/`](./讲透RAG/README.md) | 06 类：向量/图/无向量/LEANN 范式之争全谱系 |
-| [`讲透记忆/`](./讲透记忆/README.md) | 07 类：8 仓 22 万星 + 腾讯产品化 |
-| [`讲透宇宙/01-学/讲透Agent//`](讲透宇宙/01-学/讲透Agent) · [`讲透多Agent协作/`](./讲透多Agent协作/README.md) | 04/05 类：编排 + harness 产业链（ECC 登顶） |
-| [`讲透上下文缓存/`](./讲透上下文缓存/README.md) | 08 类：token 经济学 ≈38 万星 |
-| [`讲透微调/`](./讲透微调) | 02 类：LlamaFactory/unsloth/peft/ms-swift |
+| `讲透LLM/` | 全链镜像：01/02/03 类 ↔ 00-05 篇目 |
+| `讲透RAG/` | 06 类：向量/图/无向量/LEANN 范式之争全谱系 |
+| [`讲透记忆/`](讲透宇宙/01-学/讲透Agent/讲透记忆/README.md) | 07 类：8 仓 22 万星 + 腾讯产品化 |
+| [`讲透宇宙/01-学/讲透Agent//`](讲透宇宙/01-学/讲透Agent) · [`讲透多Agent协作/`](讲透宇宙/01-学/讲透Agent/讲透多Agent协作/README.md) | 04/05 类：编排 + harness 产业链（ECC 登顶） |
+| [`讲透上下文缓存/`](讲透宇宙/01-学/讲透Agent/讲透上下文缓存/README.md) | 08 类：token 经济学 ≈38 万星 |
+| `讲透微调/` | 02 类：LlamaFactory/unsloth/peft/ms-swift |
 | [`讲透宇宙/01-学/讲透Prompt//`](讲透宇宙/01-学/讲透Prompt) | 09/12 类：promptfoo/prompt-optimizer/prompts.chat |
 | [`讲透宇宙/01-学/讲透代码生成//`](讲透宇宙/01-学/讲透代码生成/README.md) | 05 类 23 仓：编码 Agent 食物链 |
 | [`欺骗动力学`](./欺骗动力学-检测Prompt库.md) | 11 类：泄露/越狱/红队攻防 |
-| [`用例库/`](./用例库/README.md) | 44 仓已在 topic:ai 深读，重叠仓用例卡直接复用 |
+| [`用例库/`](实例/用例库/README.md) | 44 仓已在 topic:ai 深读，重叠仓用例卡直接复用 |
 
 ---
 
@@ -161,7 +161,7 @@ datawhalechina 6 仓（hello-agents 73K、self-llm、happy-llm、llm-cookbook、
 
 ## 7. 新生代相变观测（2025+ 创建的 89 仓聚类）
 
-> 按「复杂系统」视角（[`复杂系统迭代work4ai.md`](./复杂系统迭代work4ai.md)），2025+ 新生代是生态的**升温期产物**——聚类后显现两条明确的**相变线**：
+> 按「复杂系统」视角（`复杂系统迭代work4ai.md`），2025+ 新生代是生态的**升温期产物**——聚类后显现两条明确的**相变线**：
 
 | 相变线 | 聚类规模 | 成员特征 | 相变判读 |
 |---|---:|---|---|
@@ -197,7 +197,7 @@ datawhalechina 6 仓（hello-agents 73K、self-llm、happy-llm、llm-cookbook、
 2. **效率榜 Top10 全部是 Claude Code 经济圈**（harness/技能/token/记忆四件套）——注意力温度最高的不是模型层，是 **Agent 治理层**，与 §7 相变观测互证。
 3. **监测落地**：`.tools/eco_temp_monitor.py` 月度重跑本快照，星/月速率即生态温度 T 的时间序列（对应复杂系统文件 4.1 的「温度」指标）。
 
-> **落地层（2026-08-15 全量完成）**：llm 独有 143 仓（本文件 §6 交集 97 仓已由 topic:ai E01-E24 深读覆盖）的全部用例卡见 [`用例库/`](./用例库/README.md) **E25-E39 十五册**（A+ 档 README 深画像，140 成功 + 3 仓降级元数据卡显式标注 ⚠）——240 仓深读覆盖率 100%。
+> **落地层（2026-08-15 全量完成）**：llm 独有 143 仓（本文件 §6 交集 97 仓已由 topic:ai E01-E24 深读覆盖）的全部用例卡见 [`用例库/`](实例/用例库/README.md) **E25-E39 十五册**（A+ 档 README 深画像，140 成功 + 3 仓降级元数据卡显式标注 ⚠）——240 仓深读覆盖率 100%。
 > **opencode 集成层（2026-08-15）**：全量 240 仓已结构化为 `~/.config/opencode/skills/llm-landscape/`（SKILL.md 十四赛道决策矩阵 + catalog.tsv 数据层）+ `/stack` 选型命令——本文件从"观测报告"升级为**可查询的生态决策资产**（查询协议见 SKILL.md 使用协议节）。
 
 ---

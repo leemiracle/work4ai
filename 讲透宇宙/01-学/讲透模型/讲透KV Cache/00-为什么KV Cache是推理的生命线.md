@@ -5,7 +5,7 @@
 > 但 KV Cache 本身要占显存，且随上下文线性增长——**到了 2024-2026，KV Cache 反过来成了推理显存的第一大头**，所有推理优化（vLLM 的 PagedAttention / SGLang 的 RadixAttention / DeepSeek 的 MLA / 量化）都围绕它转。本系列就是把这件事往死里钻透。
 >
 > 配套实验：`experiments/00_why_kv_cache.py`（纯 CPU + numpy，已实跑验证）
-> 配套资源：[`../../../../讲透宇宙/01-学/讲透公开课//03-AI Infra 源码导读`](<../讲透公开课/03-AI Infra 源码导读清单.md>)（vLLM/SGLang 源码）+ [`../../../../讲透宇宙/01-学/讲透GPU与系统级//03-推理引擎`](讲透宇宙/01-学/讲透GPU与系统级//03-推理引擎.md)（系统级概览，本系列是其深钻版）
+> 配套资源：[`../../../../讲透宇宙/01-学/讲透公开课//03-AI Infra 源码导读`](<../讲透公开课/03-AI Infra 源码导读清单.md>)（vLLM/SGLang 源码）+ `../../../../讲透宇宙/01-学/讲透GPU与系统级//03-推理引擎`（系统级概览，本系列是其深钻版）
 
 ---
 
@@ -159,7 +159,7 @@ Llama-3-70B 的权重是 ~140 GB（FP16），单条 8k 请求的 KV Cache 才 2.
 KV Cache 占用大且随请求动态变化（序列长度不同 → 内部碎片 + 外部碎片）。解决方案：
 
 - **vLLM PagedAttention**：直接套 OS 虚拟内存思想——把 KV Cache 分成固定大小的 page，逻辑连续/物理离散，page table 映射。**这是 OS 思想在 AI 的最经典案例**。
-  - 详见 [`../../../../讲透宇宙/01-学/讲透GPU与系统级//03-推理引擎`](讲透宇宙/01-学/讲透GPU与系统级//03-推理引擎.md) 第二节 + 本系列 `02-PagedAttention深挖`
+  - 详见 `../../../../讲透宇宙/01-学/讲透GPU与系统级//03-推理引擎` 第二节 + 本系列 `02-PagedAttention深挖`
   - 源码：[`../../../../讲透宇宙/01-学/讲透公开课//03`](<../讲透公开课/03-AI Infra 源码导读清单.md>) 的 I1 vLLM 条目，关键文件 `vllm/core/block_manager.py`
 
 - **SGLang RadixAttention**：用基数树（radix tree）自动识别并复用任意共享前缀的 KV Cache（多轮对话 / few-shot / 系统提示词复用）。比 vLLM 的 prefix cache 更通用。

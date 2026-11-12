@@ -5,12 +5,12 @@
 > 这是所有 AI 应用里**最特殊的一类**：它有**递归性**（AI 改进 AI → 改进后的 AI 再改进 AI → ...），有 **self-reference**（AI 理解自己），也带来**独特风险**（model collapse、不可控的递归自我改进）。理解 AI for AI，是理解 AGI 可能性的钥匙。
 >
 > 配套（4 条线）：
-> - [`讲透RL/03 RLHF/DPO/GRPO`](../讲透RL/03-RLHF-DPO-GRPO.md)（AI 对齐 AI 的工程实现）
+> - `讲透RL/03 RLHF/DPO/GRPO`（AI 对齐 AI 的工程实现）
 > - [`../../../讲透宇宙/01-学/讲透AI应用全景//02-AI4Math`](./02-AI4Math.md)（AlphaProof 是 AI for AI 的雏形——AI 做推理）
-> - **第③层（AI 训练 AI）深挖** → [`讲透数据`](讲透宇宙/01-学/讲透数据)（合成数据/Model Collapse/数据墙）
-> - **第⑥层（AI 理解 AI）深挖** → [`讲透可解释性`](../讲透可解释性)（mechanistic interpretability/SAE/circuits）
-> - **哲学反思** → [`讲透科学的现代性`](讲透宇宙/01-学/讲透科学的现代性)（"AI 发现算理解吗"+ 第五范式 + 可重复性危机）
-> - **AI 理解世界吗** → [`讲透世界模型`](../讲透世界模型)（四派统一框架：视频生成/RL 内部模型/JEPA/具身）
+> - **第③层（AI 训练 AI）深挖** → `讲透数据`（合成数据/Model Collapse/数据墙）
+> - **第⑥层（AI 理解 AI）深挖** → `讲透可解释性`（mechanistic interpretability/SAE/circuits）
+> - **哲学反思** → `讲透科学的现代性`（"AI 发现算理解吗"+ 第五范式 + 可重复性危机）
+> - **AI 理解世界吗** → `讲透世界模型`（四派统一框架：视频生成/RL 内部模型/JEPA/具身）
 
 ---
 
@@ -326,5 +326,5 @@ AI 改进自己的研究能力（①）
 
 1. **回到 [00 统一框架](./00-AI应用的统一框架.md)**，看 AI for AI 在全景里的位置。
 2. **想深钻某个子方向**：AI Scientist / model collapse / Constitutional AI / interpretability——告诉我哪个，我可以单独展开（甚至开新的讲透系列）。
-3. **和 [`讲透RL/03 GRPO`](../讲透RL/03-RLHF-DPO-GRPO.md) + R1-zero 对照读**：R1-zero 是"AI 训练 AI"的当前最前沿实例。
+3. **和 `讲透RL/03 GRPO` + R1-zero 对照读**：R1-zero 是"AI 训练 AI"的当前最前沿实例。
 4. **思考开放问题**：这一篇的 7 个开放问题，每一个都是博士论文级别的研究方向。

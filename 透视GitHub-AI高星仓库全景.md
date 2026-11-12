@@ -5,7 +5,7 @@
 > 姊妹篇：本文件是「讲透」系列的生态观测锚点——所有技术单元（Agent/记忆/RAG/代码生成…）在真实开源世界的星力分布。
 > 姊妹篇 II：[`透视GitHub-LLM高星仓库全景.md`](./透视GitHub-LLM高星仓库全景.md)（topic:llm · 240 仓 · 14 赛道全显式归类，2026-08-15 同日快照）——ai 镜看 Agent 基建热，llm 镜看全栈分层。
 > 姊妹篇 III：[`透视GitHub-Harness高星仓库全景.md`](./透视GitHub-Harness高星仓库全景.md)（topic:harness · 37 仓 ≥1K★ · 2026-08-15 同日快照）——harness 镜看 2026 年爆发的新共识词（Agent=Model+Harness），本篇"harness 成为新共识"判断的专镜验证。
-> **落地层**：44 个代表仓的真实代码深读用例卡见 [`用例库/`](./用例库/README.md)（带 文件:行号 证据）。
+> **落地层**：44 个代表仓的真实代码深读用例卡见 [`用例库/`](实例/用例库/README.md)（带 文件:行号 证据）。
 
 ---
 
@@ -97,13 +97,13 @@ microsoft 8 仓领跑（generative-ai-for-beginners、autogen、agent-framework�
 
 ## 3. 七大洞察（已过反虚荣 + 欺骗动力学自检）
 
-**① Agent 是新的"应用服务器"。** 128/279（46%）的仓在直接回答同一个问题："Agent 怎么跑起来？"——框架（autogen/crewAI）、运行时（goose/zeroclaw/elizaOS）、沙箱（daytona/e2b/OpenSandbox）、记忆（mem0/claude-mem）、技能（superpowers/taste-skill）、MCP 工具生态（awesome-mcp-servers 92K）。这对应本项目 [`讲透多Agent协作/`](./讲透多Agent协作/README.md) 与 `透视Agent系统工程/`（待写/未落盘）。
+**① Agent 是新的"应用服务器"。** 128/279（46%）的仓在直接回答同一个问题："Agent 怎么跑起来？"——框架（autogen/crewAI）、运行时（goose/zeroclaw/elizaOS）、沙箱（daytona/e2b/OpenSandbox）、记忆（mem0/claude-mem）、技能（superpowers/taste-skill）、MCP 工具生态（awesome-mcp-servers 92K）。这对应本项目 [`讲透多Agent协作/`](讲透宇宙/01-学/讲透Agent/讲透多Agent协作/README.md) 与 `透视Agent系统工程/`（待写/未落盘）。
 
 **② 编码是 Agent 第一落地场景，且长出了完整食物链。** 从模型 CLI（gemini-cli、qwen-code、opencode、crush）到 harness（SWE-agent、plandex、deepagents、herdr）到外围经济（caveman 省 token、CodexBar 计量、claude-mem 记忆、cockpit-tools 账号管理）——**"Claude Code 经济圈"本身就是一条 50+ 仓的产业链**。对应 [`讲透宇宙/01-学/讲透代码生成//`](讲透宇宙/01-学/讲透代码生成/README.md)。
 
-**③ 记忆层独立成科（2025–26 最大的新增品类之一）。** mem0 63K、claude-mem 90K、mempalace 58K、letta、cognee、EverOS、memvid、Memori——"给 Agent 装持久记忆"从 RAG 里分裂出来成为独立基础设施层。对应 [`讲透记忆/`](./讲透记忆/README.md)。
+**③ 记忆层独立成科（2025–26 最大的新增品类之一）。** mem0 63K、claude-mem 90K、mempalace 58K、letta、cognee、EverOS、memvid、Memori——"给 Agent 装持久记忆"从 RAG 里分裂出来成为独立基础设施层。对应 [`讲透记忆/`](讲透宇宙/01-学/讲透Agent/讲透记忆/README.md)。
 
-**④ token 经济学成为独立优化维度。** caveman 98K（砍 65% token）、headroom 66K（压缩工具输出省 20%）、repomix（仓库打包喂 LLM）、gitingest——当智能按 token 计价，"上下文压缩"就是新的性能工程。对应 [`讲透上下文缓存/`](./讲透上下文缓存/README.md)。
+**④ token 经济学成为独立优化维度。** caveman 98K（砍 65% token）、headroom 66K（压缩工具输出省 20%）、repomix（仓库打包喂 LLM）、gitingest——当智能按 token 计价，"上下文压缩"就是新的性能工程。对应 [`讲透上下文缓存/`](讲透宇宙/01-学/讲透Agent/讲透上下文缓存/README.md)。
 
 **⑤ 提示词考古学：灰色基岩。** prompts.chat 167K + 四个系统提示词泄露仓（合计 ~265K stars）——研究别人怎么给产品写 system prompt，已成为一种被 star 承认的"学科"。这既是学习资源也是攻击面。对应 [`欺骗动力学-Prompt篇.md`](./欺骗动力学-检测Prompt库.md)。
 

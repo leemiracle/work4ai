@@ -123,7 +123,7 @@ AI   AI   AlphaFold  AlphaFold  Cell  Medical  EHR
 
 - **孟德尔随机化**（Mendelian Randomization）：基因作工具变量
 - **药物再利用**：从 EHR 数据找因果
-- 详见 [`讲透因果推断`](../../讲透因果推断)
+- 详见 `讲透因果推断`
 
 ### 3.3 数据稀缺 + 迁移学习
 
@@ -135,7 +135,7 @@ AI   AI   AlphaFold  AlphaFold  Cell  Medical  EHR
 
 - 医生不能用黑箱——**必须解释**
 - 监管（FDA）要求可解释
-- 详见 [`讲透可解释性`](../../讲透可解释性)
+- 详见 `讲透可解释性`
 
 ---
 

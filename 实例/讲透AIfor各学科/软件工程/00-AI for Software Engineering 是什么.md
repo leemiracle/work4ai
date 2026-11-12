@@ -79,7 +79,7 @@
 
 - LLM 单次调用不够
 - **RAG over codebase**（向量数据库 + 代码）
-- 详见 [`讲透RAG`](../../讲透RAG)。
+- 详见 `讲透RAG`。
 
 ### 3.2 Agent 化
 
